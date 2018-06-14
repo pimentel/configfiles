@@ -47,7 +47,7 @@ set nocompatible
 " turn on line numbers
 set number
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
-  
+
 " font
 set gfn=Hack:h13.5
 
@@ -159,6 +159,9 @@ noremap k gk
 " Automatically cd into the directory that the file is in
 autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
 
+" Automatically remove trailing white space on save
+autocmd BufWritePre * :%s/\s\+$//e
+
 " " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 " let g:UltiSnipsExpandTrigger="<c-j>"
 " let g:UltiSnipsJumpForwardTrigger="<c-l>"
@@ -189,7 +192,7 @@ let g:airline_solarized_bg='dark'
 
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
- 
+
 " Show trailing whitespace
 " let g:airline#extensions#whitespace#enabled = 0
 
@@ -220,4 +223,4 @@ let R_assign = 2
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
 map t <Plug>Sneak_t
-map T <Plug>Sneak_T 
+map T <Plug>Sneak_T
