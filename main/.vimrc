@@ -11,6 +11,7 @@ Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
+" Plug 'raimondi/delimitmate'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 " Plug 'easymotion/vim-easymotion'
@@ -19,6 +20,11 @@ Plug 'qpkorr/vim-bufkill'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'mileszs/ack.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'tpope/vim-repeat'
+Plug 'luochen1990/rainbow'
+
+" extended % matching for HTML, LaTeX, and many other languages
+Plug 'vim-scripts/matchit.zip'
 
 " language support
 Plug 'Vimjas/vim-python-pep8-indent'
@@ -30,6 +36,17 @@ Plug 'jalvesaq/Nvim-R'
 Plug 'gregsexton/Atom'
 Plug 'altercation/vim-colors-solarized'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
+
+Plug 'KabbAmine/yowish.vim'
+Plug 'whatyouhide/vim-gotham'
+Plug 'romainl/Apprentice'
+Plug 'joshdick/onedark.vim'
+Plug 'nightsense/carbonized'
+Plug 'toupeira/vim-desertink'
+
+" requires installation via homebrew
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -60,7 +77,7 @@ set ruler
 " Attempt to determine the type of a file based on its name and possibly its
 " contents.  Use this to allow intelligent auto-indenting for each filetype,
 " and for plugins that are filetype specific.
-filetype indent plugin on
+" filetype indent plugin on
 
 " Turn on omnicomplete in all modes
 set omnifunc=syntaxcomplete#Complete
@@ -73,10 +90,6 @@ set wildignore=*.swp,*.bak,*.pyc,*.class,*.o
 " add a '$' to the end of a change motion
 set cpoptions+=$
 
-set autoindent
-set copyindent " copy the previous line's indentation
-set smartindent
-
 set backspace=indent,eol,start
 set autoread
 
@@ -84,11 +97,16 @@ set autoread
 set nofoldenable
 
 " set tabsize to 2 spaces
+set autoindent
+set copyindent " copy the previous line's indentation
+set smartindent
+
+" filetype plugin indent on
+
 set tabstop=2
 set shiftwidth=2
-set softtabstop=0
+set softtabstop=2
 set expandtab
-set smartindent
 set smarttab      " insert tabs on the start of a line according to
                   "    shiftwidth, not tabstop
 
@@ -106,10 +124,14 @@ set incsearch ignorecase smartcase
 " colorscheme elise
 " colorscheme jellybeans
 " colorscheme sonofobsidian
-colorscheme atom
+" colorscheme atom
+set background=dark
+colorscheme solarized
 
+" display this many lines around cursor
+set scrolloff=5
 
-set guioptions-=T   " remove toolbar
+" set guioptions-=T   " remove toolbar
 
 " Keybindings
 inoremap <C-space> <C-x><C-o>
@@ -135,9 +157,16 @@ let maplocalleader=','
 
 " ============================================================================
 " File specific settings
+" :help ft-r-indent
+let r_indent_align_args = 0
+
+" Nvim-R
+let R_assign = 2
+
+
 autocmd Filetype tex setl sw=2 sts=2
 
-autocmd Filetype r setl tabstop=2 sw=2 sts=2
+" autocmd Filetype r setl tabstop=2 sw=2 sts=2
 autocmd Filetype rmd setl tabstop=2 sw=2 sts=2
 autocmd Filetype cpp setl tabstop=2 sw=2 sts=2
 autocmd Filetype c setl tabstop=2 sw=2 sts=2
@@ -177,9 +206,10 @@ autocmd BufWritePre * :%s/\s\+$//e
 " au Syntax * RainbowParenthesesLoadRound
 " au Syntax * RainbowParenthesesLoadSquare
 " au Syntax * RainbowParenthesesLoadBraces
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
 " Enable Markdown support
-au BufNewFile,BufRead *.md set filetype=markdown
+" au BufNewFile,BufRead *.md set filetype=markdown
 
 " Snakefile
 au BufNewFile,BufRead Snakefile set filetype=python
@@ -209,18 +239,31 @@ map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
 " start a command with a single !
-nnoremap ! :!
+" nnoremap ! :!
 
 let g:slime_target = "tmux"
 
 " vim-gitgutter
 set updatetime=100
 
-" Nvim-R
-let R_assign = 2
-
-" sneak configuration
+" vim-sneak configuration
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
+
+" sneak: use case insensitive matches
+let g:sneak#use_ic_scs = 1
+
+" use the_silver_searcher rather than ack
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+" smart home: http://vim.wikia.com/wiki/VimTip315
+noremap <expr> <Home> (col('.') == matchend(getline('.'), '^\s*')+1 ? '0' : '^')
+imap <Home> <C-o><Home>
+" noremap <expr> <End> (col('.') == match(getline('.'), '\s*$') ? '$' : 'g_')
+" vnoremap <expr> <End> (col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_')
+" imap <End> <C-o><End>
+
