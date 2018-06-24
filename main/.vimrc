@@ -163,7 +163,6 @@ let r_indent_align_args = 0
 " Nvim-R
 let R_assign = 2
 
-
 autocmd Filetype tex setl sw=2 sts=2
 
 " autocmd Filetype r setl tabstop=2 sw=2 sts=2
@@ -178,12 +177,11 @@ cmap w!! %!sudo tee > /dev/null %
 set laststatus=2
 
 " Reformat the entire paragraph
-noremap Q gqip
+" noremap Q gqip
 
 " Make hjkl act like you would expect on wrapped lines
 noremap j gj
 noremap k gk
-
 
 " Automatically cd into the directory that the file is in
 autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
@@ -191,21 +189,6 @@ autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
 " Automatically remove trailing white space on save
 autocmd BufWritePre * :%s/\s\+$//e
 
-" " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-" let g:UltiSnipsExpandTrigger="<c-j>"
-" let g:UltiSnipsJumpForwardTrigger="<c-l>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-h>"
-
-" let g:pymode = 1
-" let g:pymode_options = 0
-" let g:pymode_virtualenv = 1
-" let g:pymode_virtualenv_path = $HOME.'/.virtualenvs/py2'
-
-" Rainbow parens always on
-" au VimEnter * RainbowParenthesesToggle
-" au Syntax * RainbowParenthesesLoadRound
-" au Syntax * RainbowParenthesesLoadSquare
-" au Syntax * RainbowParenthesesLoadBraces
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
 " Enable Markdown support
@@ -263,7 +246,20 @@ endif
 " smart home: http://vim.wikia.com/wiki/VimTip315
 noremap <expr> <Home> (col('.') == matchend(getline('.'), '^\s*')+1 ? '0' : '^')
 imap <Home> <C-o><Home>
-" noremap <expr> <End> (col('.') == match(getline('.'), '\s*$') ? '$' : 'g_')
-" vnoremap <expr> <End> (col('.') == match(getline('.'), '\s*$') ? '$h' : 'g_')
-" imap <End> <C-o><End>
 
+" depends on default slime mappings
+function! RSendFunctionSlime()
+  let start=winsaveview()
+  " find the '{'
+  :exe "normal ?{\<CR>w99[{:noh\<CR>"
+  " highlight matching '}' and call slime
+  :exe "normal V%\<c-c>\<c-c>"
+  call winrestview(start)
+endfunction
+
+" depends on default slime mappings
+function! RSendLineSlime()
+  let start=winsaveview()
+  :exe "normal V\<c-c>\<c-c>"
+  call winrestview(start)
+endfunction
