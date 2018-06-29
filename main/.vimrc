@@ -2,7 +2,17 @@
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
+if has("gui_vimr")
+  " VimR specific stuff
+  call plug#begin('~/.local/share/nvim/plugged')
+endif
+
+if has("gui_macvim")
+  " MacVim specific stuff
+  call plug#begin('~/.vim/plugged')
+  " font
+  set gfn=Hack:h13.5
+endif
 
 Plug 'ajh17/VimCompletesMe'
 Plug 'tpope/vim-obsession'
@@ -31,6 +41,7 @@ Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'gabrielelana/vim-markdown'
 Plug 'lervag/vimtex'
 Plug 'jalvesaq/Nvim-R'
+Plug 'klmr/vim-snakemake'
 
 " colorschemes
 Plug 'gregsexton/Atom'
@@ -65,8 +76,6 @@ set nocompatible
 set number
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 
-" font
-set gfn=Hack:h13.5
 
 set wrap
 set textwidth=79
@@ -162,6 +171,8 @@ let r_indent_align_args = 0
 
 " Nvim-R
 let R_assign = 2
+" let R_in_buffer = 0
+" let R_applescript = 1
 
 autocmd Filetype tex setl sw=2 sts=2
 
@@ -240,7 +251,8 @@ let g:sneak#use_ic_scs = 1
 
 " use the_silver_searcher rather than ack
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+  " odd error on mac: https://github.com/ggreer/the_silver_searcher/issues/1038
+  let g:ackprg = 'ag --mmap --vimgrep'
 endif
 
 " smart home: http://vim.wikia.com/wiki/VimTip315
@@ -251,7 +263,7 @@ imap <Home> <C-o><Home>
 function! RSendFunctionSlime()
   let start=winsaveview()
   " find the '{'
-  :exe "normal ?{\<CR>w99[{:noh\<CR>"
+  :exe "normal! ?{\<CR>w99[{:noh\<CR>"
   " highlight matching '}' and call slime
   :exe "normal V%\<c-c>\<c-c>"
   call winrestview(start)

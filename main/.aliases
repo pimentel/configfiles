@@ -7,7 +7,7 @@ alias po="popd"
 alias Rns="R --no-save"
 alias Rv="R --vanilla"
 
-alias bup="brew update; brew upgrade --all"
+alias bup="brew update; brew upgrade; brew cask upgrade"
 
 alias tn="tmux new -s"
 alias ta="tmux attach -t"
@@ -19,3 +19,6 @@ alias ipy="ipython"
 alias gcam="git commit -a -m"
 
 alias dev_kallisto="~/dev/kallisto/build/src/kallisto"
+
+# odd error on mac: https://github.com/ggreer/the_silver_searcher/issues/1038
+alias ag="ag --mmap"
