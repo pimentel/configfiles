@@ -2,7 +2,7 @@ tap 'homebrew/cask'
 tap 'homebrew/cask-fonts'
 
 # install scripts we want
-brew 'ack'
+brew 'ag'
 brew 'boost'
 brew 'cmake'
 brew 'coreutils'
@@ -21,6 +21,7 @@ brew 'tree'
 brew 'unrar'
 brew 'wget'
 brew 'zsh'
+brew 'zsh-completions'
 
 # get brew cask for apps
 tap 'caskroom/cask'
@@ -35,3 +36,6 @@ cask 'macvim'
 cask 'r-app'
 cask 'slack'
 cask 'spotify'
+
+tap 'universal-ctags/universal-ctags'
+brew 'universal-ctags', args: ['HEAD']

@@ -9,12 +9,12 @@ options(width = 100)
 options(prompt = "R> ")
 
 # From Vim-R-Plugin
-# if(interactive()){
-#   # library(colorout)
+if(interactive()){
+  library('colorout')
 #   # library(setwidth)
 #   options(vimcom.verbose = 1) # optional
 #   library(vimcom)
-# }
+}
 
 .First <- function() {
     requiredPkgs <- c(

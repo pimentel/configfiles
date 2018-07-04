@@ -2,16 +2,14 @@
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-if has("gui_vimr")
-  " VimR specific stuff
+if has('nvim')
   call plug#begin('~/.local/share/nvim/plugged')
+else
+  call plug#begin('~/.vim/plugged')
 endif
 
-if has("gui_macvim")
-  " MacVim specific stuff
-  call plug#begin('~/.vim/plugged')
-  " font
-  set gfn=Hack:h13.5
+if has('gui_running')
+  set guifont=Hack:h14
 endif
 
 Plug 'ajh17/VimCompletesMe'
@@ -20,11 +18,10 @@ Plug 'airblade/vim-gitgutter'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'jiangmiao/auto-pairs'
-" Plug 'raimondi/delimitmate'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
-" Plug 'easymotion/vim-easymotion'
 Plug 'Chiel92/vim-autoformat'
 Plug 'qpkorr/vim-bufkill'
 Plug 'vim-airline/vim-airline-themes'
@@ -32,6 +29,7 @@ Plug 'mileszs/ack.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-repeat'
 Plug 'luochen1990/rainbow'
+Plug 'ludovicchabant/vim-gutentags'
 
 " extended % matching for HTML, LaTeX, and many other languages
 Plug 'vim-scripts/matchit.zip'
@@ -42,6 +40,9 @@ Plug 'gabrielelana/vim-markdown'
 Plug 'lervag/vimtex'
 Plug 'jalvesaq/Nvim-R'
 Plug 'klmr/vim-snakemake'
+
+" linter support
+Plug 'w0rp/ale'
 
 " colorschemes
 Plug 'gregsexton/Atom'
@@ -76,9 +77,9 @@ set nocompatible
 set number
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 
-
 set wrap
-set textwidth=79
+set textwidth=90
+set colorcolumn=90
 set formatoptions=qrn1
 " show cursor position at all the time
 set ruler
@@ -86,7 +87,7 @@ set ruler
 " Attempt to determine the type of a file based on its name and possibly its
 " contents.  Use this to allow intelligent auto-indenting for each filetype,
 " and for plugins that are filetype specific.
-" filetype indent plugin on
+filetype indent plugin on
 
 " Turn on omnicomplete in all modes
 set omnifunc=syntaxcomplete#Complete
@@ -110,8 +111,6 @@ set autoindent
 set copyindent " copy the previous line's indentation
 set smartindent
 
-" filetype plugin indent on
-
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
@@ -134,8 +133,11 @@ set incsearch ignorecase smartcase
 " colorscheme jellybeans
 " colorscheme sonofobsidian
 " colorscheme atom
-set background=dark
-colorscheme solarized
+if has('gui')
+  set background=dark
+  colorscheme solarized
+endif
+
 
 " display this many lines around cursor
 set scrolloff=5
@@ -147,25 +149,40 @@ inoremap <C-space> <C-x><C-o>
 " nnoremap ; :
 
 " After a search, press ESC to clear the highlight
-nnoremap <esc> :noh<return>
+if has('gui')
+  nnoremap <esc> :noh<return>
+else
+  " XXX: apparently remapping ESC breaks in terminal
+  nnoremap <esc><esc> :noh<return>
+endif
 
 " Reload ~/.vimrc
 nnoremap gev :edit ~/.vimrc<return>
 nnoremap grv :source ~/.vimrc<return>
 
-" Easy window navigation
-" TODO: Make this the mappings only on Mac
-nmap <silent> ˚ :wincmd k<CR>
-nmap <silent> ∆ :wincmd j<CR>
-nmap <silent> ˙ :wincmd h<CR>
-nmap <silent> ¬ :wincmd l<CR>
+if has('macunix')
+  " Easy window navigation
+  nmap <silent> ˚ :wincmd k<CR>
+  nmap <silent> ∆ :wincmd j<CR>
+  nmap <silent> ˙ :wincmd h<CR>
+  nmap <silent> ¬ :wincmd l<CR>
+endif
 
 " Default leader is '\'
 let mapleader=','
 let maplocalleader=','
 
+" restore last position in file
+" https://stackoverflow.com/questions/774560/in-vim-how-do-i-get-a-file-to-open-at-the-same-line-number-i-closed-it-at-last
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
 " ============================================================================
 " File specific settings
+
+" R
 " :help ft-r-indent
 let r_indent_align_args = 0
 
@@ -174,12 +191,16 @@ let R_assign = 2
 " let R_in_buffer = 0
 " let R_applescript = 1
 
-autocmd Filetype tex setl sw=2 sts=2
+" lintr options
+let g:ale_r_lintr_options='lintr::with_defaults(single_quotes_linter = NULL,
+      \ assignment_linter = NULL, line_length_linter(100),
+      \ absolute_paths_linter = NULL, absolute_path_linter = NULL,
+      \ commented_code_linter = NULL, object_usage_linter = NULL)'
 
-" autocmd Filetype r setl tabstop=2 sw=2 sts=2
-autocmd Filetype rmd setl tabstop=2 sw=2 sts=2
-autocmd Filetype cpp setl tabstop=2 sw=2 sts=2
-autocmd Filetype c setl tabstop=2 sw=2 sts=2
+" python
+let g:ale_python_flake8_options=' --ignore F401'
+autocmd Filetype python setl tabstop=4 sw=4 sts=4
+autocmd Filetype python setl colorcolumn=80 textwidth=80
 
 " Use w!! to write file with root permissions
 cmap w!! %!sudo tee > /dev/null %
@@ -202,12 +223,6 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
-" Enable Markdown support
-" au BufNewFile,BufRead *.md set filetype=markdown
-
-" Snakefile
-au BufNewFile,BufRead Snakefile set filetype=python
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " airline
@@ -219,6 +234,9 @@ let g:airline#extensions#tabline#enabled = 1
 
 " Show trailing whitespace
 " let g:airline#extensions#whitespace#enabled = 0
+
+" enable ale
+let g:airline#extensions#ale#enabled = 1
 
 autocmd Filetype rmd nmap <LocalLeader>zp <Plug>ROpenPDF
 
@@ -235,7 +253,8 @@ map [] k$][%?}<CR>
 " start a command with a single !
 " nnoremap ! :!
 
-let g:slime_target = "tmux"
+let g:slime_target = 'tmux'
+let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], 'target_pane': 'ir:1.1'}
 
 " vim-gitgutter
 set updatetime=100
