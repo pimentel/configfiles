@@ -1,0 +1,14 @@
+session_name: ir
+start_directory: ~/Dropbox/postdoc/ir
+windows:
+  - window_name: remote
+    layout: even-horizontal
+    panes:
+      - shell_command: ssh sherlock2
+        focus: true
+      - shell_command:
+  - window_name: local
+    layout: even-horizontal
+    panes:
+      - shell_command:
+      - shell_command:

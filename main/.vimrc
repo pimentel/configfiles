@@ -16,7 +16,7 @@ Plug 'ajh17/VimCompletesMe'
 Plug 'tpope/vim-obsession'
 Plug 'airblade/vim-gitgutter'
 Plug 'jpalardy/vim-slime'
-Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'jiangmiao/auto-pairs'
@@ -45,16 +45,16 @@ Plug 'klmr/vim-snakemake'
 Plug 'w0rp/ale'
 
 " colorschemes
-Plug 'gregsexton/Atom'
+" Plug 'gregsexton/Atom'
 Plug 'altercation/vim-colors-solarized'
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
+" Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
-Plug 'KabbAmine/yowish.vim'
-Plug 'whatyouhide/vim-gotham'
-Plug 'romainl/Apprentice'
-Plug 'joshdick/onedark.vim'
-Plug 'nightsense/carbonized'
-Plug 'toupeira/vim-desertink'
+" Plug 'KabbAmine/yowish.vim'
+" Plug 'whatyouhide/vim-gotham'
+" Plug 'romainl/Apprentice'
+" Plug 'joshdick/onedark.vim'
+" Plug 'nightsense/carbonized'
+" Plug 'toupeira/vim-desertink'
 
 " requires installation via homebrew
 Plug '/usr/local/opt/fzf'
@@ -73,8 +73,12 @@ set hidden
 
 set nocompatible
 
-" turn on line numbers
-set number
+" turn on hybrid line numbers
+set number relativenumber
+" toggle hybrid/normal line numbers
+map <Leader><Leader>r :set relativenumber!<CR>
+
+" show line numbers in netrw
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 
 set wrap
@@ -172,6 +176,8 @@ endif
 let mapleader=','
 let maplocalleader=','
 
+noremap <Leader>w :w<cr>
+
 " restore last position in file
 " https://stackoverflow.com/questions/774560/in-vim-how-do-i-get-a-file-to-open-at-the-same-line-number-i-closed-it-at-last
 if has("autocmd")
@@ -223,7 +229,6 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " airline
 let g:airline_theme='solarized'
@@ -232,13 +237,11 @@ let g:airline_solarized_bg='dark'
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
 
-" Show trailing whitespace
-" let g:airline#extensions#whitespace#enabled = 0
+" display the tab number
+let g:airline#extensions#tabline#tab_nr_type = 1
 
 " enable ale
 let g:airline#extensions#ale#enabled = 1
-
-autocmd Filetype rmd nmap <LocalLeader>zp <Plug>ROpenPDF
 
 " highlight ErrorMsg ctermfg=White guifg=White
 highlight ErrorMsg term=standout ctermfg=15 ctermbg=1 guifg=#FFFFFF guibg=Red
@@ -250,11 +253,8 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
-" start a command with a single !
-" nnoremap ! :!
-
 let g:slime_target = 'tmux'
-let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], 'target_pane': 'ir:1.1'}
+let g:slime_default_config = {"socket_name": 'default', 'target_pane': ':'}
 
 " vim-gitgutter
 set updatetime=100

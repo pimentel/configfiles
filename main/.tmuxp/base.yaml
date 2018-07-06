@@ -1,0 +1,14 @@
+session_name: base
+start_directory: $HOME
+windows:
+  - window_name: ''
+    layout: even-horizontal
+    panes:
+      - shell_command:
+        focus: true
+      - shell_command:
+  - window_name: ''
+    layout: even-horizontal
+    panes:
+      - shell_command:
+      - shell_command:

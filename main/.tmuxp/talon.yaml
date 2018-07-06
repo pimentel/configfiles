@@ -1,0 +1,15 @@
+session_name: talon
+start_directory: ~/.talon
+windows:
+  - window_name: debug
+    focus: true
+    panes:
+      - shell_command:
+        - tail -100 -f talon.log
+        focus: true
+  - window_name: user
+    panes:
+      - shell_command: cd user && sleep 0.5 && ls
+  - window_name: repl
+    panes:
+      - ''
