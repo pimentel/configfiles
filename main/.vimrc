@@ -1,7 +1,3 @@
-" vim-plug configuration
-" Specify a directory for plugins
-" - For Neovim: ~/.local/share/nvim/plugged
-" - Avoid using standard Vim directory names like 'plugin'
 if has('nvim')
   call plug#begin('~/.local/share/nvim/plugged')
 else
@@ -16,7 +12,6 @@ Plug 'ajh17/VimCompletesMe'
 Plug 'tpope/vim-obsession'
 Plug 'airblade/vim-gitgutter'
 Plug 'jpalardy/vim-slime'
-" Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'jiangmiao/auto-pairs'
@@ -48,13 +43,6 @@ Plug 'w0rp/ale'
 " Plug 'gregsexton/Atom'
 Plug 'altercation/vim-colors-solarized'
 " Plug 'sonph/onehalf', { 'rtp': 'vim' }
-
-" Plug 'KabbAmine/yowish.vim'
-" Plug 'whatyouhide/vim-gotham'
-" Plug 'romainl/Apprentice'
-" Plug 'joshdick/onedark.vim'
-" Plug 'nightsense/carbonized'
-" Plug 'toupeira/vim-desertink'
 
 " requires installation via homebrew
 Plug '/usr/local/opt/fzf'
@@ -96,6 +84,9 @@ filetype indent plugin on
 " Turn on omnicomplete in all modes
 set omnifunc=syntaxcomplete#Complete
 
+" search recursively through the current path
+set path=.,,**,/usr/include
+
 " command line completion
 set wildmenu
 set wildmode=longest:full,full
@@ -121,36 +112,52 @@ set softtabstop=2
 set expandtab
 set smarttab      " insert tabs on the start of a line according to
                   "    shiftwidth, not tabstop
-
 " turn on highlighting during search
 set hlsearch
 set incsearch ignorecase smartcase
 
+" Show the status line all of the time
+set laststatus=2
+
 " Color scheme
-" colorscheme slate
-" colorscheme torte
-" colorscheme kellys
-" colorscheme lettuce
-" colorscheme inkpot
-" colorscheme sift
-" colorscheme elise
-" colorscheme jellybeans
-" colorscheme sonofobsidian
 " colorscheme atom
 if has('gui')
   set background=dark
   colorscheme solarized
 endif
 
-
 " display this many lines around cursor
 set scrolloff=5
 
-" set guioptions-=T   " remove toolbar
+" highlight ErrorMsg ctermfg=White guifg=White
+highlight ErrorMsg term=standout ctermfg=15 ctermbg=1 guifg=#FFFFFF guibg=Red
 
+" ==============================================================================
 " Keybindings
+" ==============================================================================
+
+" Make hjkl act like you would expect on wrapped lines
+noremap j gj
+noremap k gk
 inoremap <C-space> <C-x><C-o>
-" nnoremap ; :
+
+" vim-sneak configuration
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+
+" smart home: http://vim.wikia.com/wiki/VimTip315
+" make sure to check .gvimrc for corresponding code
+noremap <expr> <Home> (col('.') == matchend(getline('.'), '^\s*')+1 ? '0' : '^')
+imap <Home> <C-o><Home>
+
+" Jump between sections if '{' is not in first column
+" see ':help [[' and search for 'map'
+map [[ ?{<CR>w99[{:noh<CR>
+map ][ /}<CR>b99]}
+map ]] j0[[%/{<CR>
+map [] k$][%?}<CR>
 
 " After a search, press ESC to clear the highlight
 if has('gui')
@@ -176,17 +183,32 @@ endif
 let mapleader=','
 let maplocalleader=','
 
+" Use w!! to write file with root permissions
+cmap w!! %!sudo tee > /dev/null %
+
 noremap <Leader>w :w<cr>
+
+" ============================================================================
+" general autocmd
+" ============================================================================
+
+" Automatically cd into the directory that the file is in
+autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
+
+" Automatically remove trailing white space on save
+autocmd BufWritePre * :%s/\s\+$//e
+
+" on window resize, make every pane equal
+autocmd VimResized * wincmd =
 
 " restore last position in file
 " https://stackoverflow.com/questions/774560/in-vim-how-do-i-get-a-file-to-open-at-the-same-line-number-i-closed-it-at-last
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-endif
+au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+      \| exe "normal! g'\"" | endif
 
 " ============================================================================
-" File specific settings
+" plug-in and file specific settings
+" ============================================================================
 
 " R
 " :help ft-r-indent
@@ -208,28 +230,9 @@ let g:ale_python_flake8_options=' --ignore F401'
 autocmd Filetype python setl tabstop=4 sw=4 sts=4
 autocmd Filetype python setl colorcolumn=80 textwidth=80
 
-" Use w!! to write file with root permissions
-cmap w!! %!sudo tee > /dev/null %
-
-" Show the status line all of the time
-set laststatus=2
-
-" Reformat the entire paragraph
-" noremap Q gqip
-
-" Make hjkl act like you would expect on wrapped lines
-noremap j gj
-noremap k gk
-
-" Automatically cd into the directory that the file is in
-autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
-
-" Automatically remove trailing white space on save
-autocmd BufWritePre * :%s/\s\+$//e
 
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " airline
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
@@ -243,40 +246,26 @@ let g:airline#extensions#tabline#tab_nr_type = 1
 " enable ale
 let g:airline#extensions#ale#enabled = 1
 
-" highlight ErrorMsg ctermfg=White guifg=White
-highlight ErrorMsg term=standout ctermfg=15 ctermbg=1 guifg=#FFFFFF guibg=Red
-
-" Jump between sections if '{' is not in first column
-" see ':help [[' and search for 'map'
-map [[ ?{<CR>w99[{:noh<CR>
-map ][ /}<CR>b99]}
-map ]] j0[[%/{<CR>
-map [] k$][%?}<CR>
-
+" slime
 let g:slime_target = 'tmux'
 let g:slime_default_config = {"socket_name": 'default', 'target_pane': ':'}
 
 " vim-gitgutter
 set updatetime=100
 
-" vim-sneak configuration
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-
 " sneak: use case insensitive matches
 let g:sneak#use_ic_scs = 1
 
 " use the_silver_searcher rather than ack
 if executable('ag')
-  " odd error on mac: https://github.com/ggreer/the_silver_searcher/issues/1038
+  " odd error on mac requiring mmap:
+  " https://github.com/ggreer/the_silver_searcher/issues/1038
   let g:ackprg = 'ag --mmap --vimgrep'
 endif
 
-" smart home: http://vim.wikia.com/wiki/VimTip315
-noremap <expr> <Home> (col('.') == matchend(getline('.'), '^\s*')+1 ? '0' : '^')
-imap <Home> <C-o><Home>
+" ==============================================================================
+" custom functions
+" ==============================================================================
 
 " depends on default slime mappings
 function! RSendFunctionSlime()

@@ -10,6 +10,7 @@ cran_packages <- c(
   "data.table",
   "plyr",
   "dplyr",
+  "lintr",
   "pryr",
   "Rcpp",
   "RcppArmadillo",
