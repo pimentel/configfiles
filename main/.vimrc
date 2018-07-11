@@ -219,6 +219,12 @@ let R_assign = 2
 " let R_in_buffer = 0
 " let R_applescript = 1
 
+" ALE
+let g:ale_linters = {
+      \ 'python': ['flake8'],
+      \ 'R': ['lintr'],
+      \}
+
 " lintr options
 let g:ale_r_lintr_options='lintr::with_defaults(single_quotes_linter = NULL,
       \ assignment_linter = NULL, line_length_linter(100),
@@ -226,6 +232,7 @@ let g:ale_r_lintr_options='lintr::with_defaults(single_quotes_linter = NULL,
       \ commented_code_linter = NULL, object_usage_linter = NULL)'
 
 " python
+" let g:ale_python_flake8_executable = '/Users/hjp/miniconda3/bin/flake8'
 let g:ale_python_flake8_options=' --ignore F401'
 autocmd Filetype python setl tabstop=4 sw=4 sts=4
 autocmd Filetype python setl colorcolumn=80 textwidth=80
@@ -266,20 +273,34 @@ endif
 " ==============================================================================
 " custom functions
 " ==============================================================================
-
-" depends on default slime mappings
 function! RSendFunctionSlime()
-  let start=winsaveview()
-  " find the '{'
-  :exe "normal! ?{\<CR>w99[{:noh\<CR>"
-  " highlight matching '}' and call slime
-  :exe "normal V%\<c-c>\<c-c>"
-  call winrestview(start)
-endfunction
+  let save_cursor=winsaveview()
+  let i = line('.')
+  let line = getline(i)
+  while i > 0 && line !~ '[a-zA-Z]\+[a-zA-Z0-9_\.]*[[:space:]]*\(<-\|=\)[[:space:]]*\(function\)[[:space:]]*\((\)'
+    let i -= 1
+    let line = getline(i)
+  endwhile
+  if i == 0
+    echom "start of R function not found"
+    return
+  endif
+  let start_of_function = i
 
-" depends on default slime mappings
-function! RSendLineSlime()
-  let start=winsaveview()
-  :exe "normal V\<c-c>\<c-c>"
-  call winrestview(start)
+  let line = getline(i)
+  let end = line('$') + 1
+  while i < end && line !~ '^\(}\)'
+    let i += 1
+    let line = getline(i)
+  endwhile
+
+  if i == end
+    echom "end of R function not found"
+    return
+  endif
+  let end_of_function = i
+
+  :exe start_of_function . "," . end_of_function "SlimeSend"
+
+  call winrestview(save_cursor)
 endfunction

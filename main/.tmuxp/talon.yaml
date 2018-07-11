@@ -11,5 +11,6 @@ windows:
     panes:
       - shell_command: cd user && sleep 0.5 && ls
   - window_name: repl
+    start_directory: .venv/bin
     panes:
       - ''
