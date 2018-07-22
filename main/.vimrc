@@ -48,6 +48,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
+Plug '~/dev/vim-slimeblocks'
+
 " Initialize plugin system
 call plug#end()
 
@@ -141,6 +143,8 @@ noremap j gj
 noremap k gk
 inoremap <C-space> <C-x><C-o>
 
+noremap <space> :
+
 " vim-sneak configuration
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
@@ -188,6 +192,15 @@ cmap w!! %!sudo tee > /dev/null %
 
 noremap <Leader>w :w<cr>
 
+noremap <Leader>b :Buffers<CR>
+noremap <Leader>i :Files<CR>
+noremap <Leader>k :BD<CR>
+
+" Slime stuff
+noremap <Leader><Leader>f :call b:SlimeBlocksFunction()<CR>
+noremap <Leader><Leader>p :SlimeParagraphSend<CR>
+noremap <Leader><Leader>l :SlimeSendCurrentLine<CR>
+
 " ============================================================================
 " general autocmd
 " ============================================================================
@@ -199,7 +212,7 @@ autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
 autocmd BufWritePre * :%s/\s\+$//e
 
 " on window resize, make every pane equal
-autocmd VimResized * wincmd =
+" autocmd VimResized * wincmd =
 
 " restore last position in file
 " https://stackoverflow.com/questions/774560/in-vim-how-do-i-get-a-file-to-open-at-the-same-line-number-i-closed-it-at-last
@@ -273,34 +286,3 @@ endif
 " ==============================================================================
 " custom functions
 " ==============================================================================
-function! RSendFunctionSlime()
-  let save_cursor=winsaveview()
-  let i = line('.')
-  let line = getline(i)
-  while i > 0 && line !~ '[a-zA-Z]\+[a-zA-Z0-9_\.]*[[:space:]]*\(<-\|=\)[[:space:]]*\(function\)[[:space:]]*\((\)'
-    let i -= 1
-    let line = getline(i)
-  endwhile
-  if i == 0
-    echom "start of R function not found"
-    return
-  endif
-  let start_of_function = i
-
-  let line = getline(i)
-  let end = line('$') + 1
-  while i < end && line !~ '^\(}\)'
-    let i += 1
-    let line = getline(i)
-  endwhile
-
-  if i == end
-    echom "end of R function not found"
-    return
-  endif
-  let end_of_function = i
-
-  :exe start_of_function . "," . end_of_function "SlimeSend"
-
-  call winrestview(save_cursor)
-endfunction
