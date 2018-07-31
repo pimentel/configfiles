@@ -13,6 +13,7 @@ alias tn="tmux new -s"
 alias ta="tmux attach -t"
 alias tl="tmux ls"
 alias tk="tmux kill-session -t"
+alias tp="tmuxp load"
 
 alias ipy="ipython"
 
@@ -22,3 +23,5 @@ alias dev_kallisto="~/dev/kallisto/build/src/kallisto"
 
 # odd error on mac: https://github.com/ggreer/the_silver_searcher/issues/1038
 alias ag="ag --mmap"
+
+# vi:ft=sh

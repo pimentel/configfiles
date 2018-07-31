@@ -14,6 +14,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-sleuth'
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
@@ -198,6 +199,7 @@ noremap <Leader>k :BD<CR>
 
 " Slime stuff
 noremap <Leader><Leader>f :call b:SlimeBlocksFunction()<CR>
+noremap <Leader><Leader>m :call b:SlimeBlocksFenced()<CR>
 noremap <Leader><Leader>p :SlimeParagraphSend<CR>
 noremap <Leader><Leader>l :SlimeSendCurrentLine<CR>
 
@@ -246,7 +248,7 @@ let g:ale_r_lintr_options='lintr::with_defaults(single_quotes_linter = NULL,
 
 " python
 " let g:ale_python_flake8_executable = '/Users/hjp/miniconda3/bin/flake8'
-let g:ale_python_flake8_options=' --ignore F401'
+let g:ale_python_flake8_options=' --ignore F401,E731'
 autocmd Filetype python setl tabstop=4 sw=4 sts=4
 autocmd Filetype python setl colorcolumn=80 textwidth=80
 

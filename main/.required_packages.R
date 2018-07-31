@@ -1,7 +1,7 @@
 # To execute this script:
 # Rscript --vanilla init.R
 
-options(repos = structure(c(CRAN="http://cran.cnr.berkeley.edu")))
+options(repos = structure(c(CRAN = "http://cran.cnr.berkeley.edu")))
 
 cran_packages <- c(
   "devtools",
@@ -16,6 +16,7 @@ cran_packages <- c(
   "RcppArmadillo",
   "reshape2",
   "readr",
+  "rmarkdown",
   "roxygen2",
   "tidyr"
   )

@@ -1,15 +1,13 @@
-options(repos = structure(c(CRAN="http://cran.cnr.berkeley.edu")))
+options(repos = structure(c(CRAN = "http://cran.cnr.berkeley.edu")))
 
-options(chmhelp=TRUE)
-
-# options(help_type = "html")
+options(chmhelp = "html")
 options(max.print = 1000)
 options(width = 100)
 # options(device = "quartz")
 options(prompt = "R> ")
 
 # From Vim-R-Plugin
-if(interactive()){
+if (interactive()){
   library('colorout')
 #   # library(setwidth)
 #   options(vimcom.verbose = 1) # optional
@@ -17,7 +15,7 @@ if(interactive()){
 }
 
 .First <- function() {
-    requiredPkgs <- c(
+    required_packages <- c(
     #"AnnotationDbi", # load this first so it doesn't screw up dplyr select
     # "modules",
     # "devtools",
@@ -34,16 +32,16 @@ if(interactive()){
     # "vimcom"
     )
 
-  installed <- utils::installed.packages()[,1]
-  reqInstalled <- requiredPkgs %in% installed
-  if (any(!reqInstalled)) {
-    reqNotInstalled <- requiredPkgs[!reqInstalled]
+  installed <- utils::installed.packages()[, 1]
+  required_installed <- required_packages %in% installed
+  if (any(!required_installed)) {
+    required_missing <- required_packages[!required_installed]
     warning("\n\tThe following required packages were unavailable:\n\t\t",
-      paste(reqNotInstalled, collapse = " "))
-    utils::install.packages(reqNotInstalled)
+      paste(required_missing, collapse = " "))
+    utils::install.packages(required_missing)
   }
 
-  for (pkg in requiredPkgs) {
+  for (pkg in required_packages) {
     # print(class(pkg))
     suppressPackageStartupMessages(
       suppressWarnings({
@@ -52,7 +50,7 @@ if(interactive()){
     )
   }
 
-  # options(defaultPackages = c(getOpztion("defaultPackages"), requiredPkgs))
+  # options(defaultPackages = c(getOpztion("defaultPackages"), required_packages))
 
   #adbi <- modules::import_package("AnnotationDbi")
 
@@ -60,12 +58,12 @@ if(interactive()){
 }
 
 # ask GC nicely to run
-cleanMem <- function(n=10) {
+clean_mem <- function(n=10) {
   for (i in 1:n) gc()
 }
 
 object.sizes <- function() {
-  return(rev(sort(sapply(ls(envir=.GlobalEnv), function (object.name)
+  return(rev(sort(sapply(ls(envir = .GlobalEnv), function (object.name)
           object.size(get(object.name))))))
 }
 
