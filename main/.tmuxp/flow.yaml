@@ -1,0 +1,14 @@
+session_name: flow
+start_directory: $HOME
+windows:
+  - window_name: 'local'
+    layout: even-horizontal
+    panes:
+      - shell_command: cd ~/Dropbox/postdoc/flow && ls
+        focus: true
+      - shell_command: cd ~/Dropbox/postdoc/flow && ls
+  - window_name: 'remote'
+    layout: even-horizontal
+    panes:
+      - shell_command: ssh sherlock
+        focus: true

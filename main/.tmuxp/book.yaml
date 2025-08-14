@@ -1,0 +1,14 @@
+session_name: base
+start_directory: $HOME
+windows:
+  - window_name: ''
+    layout: even-horizontal
+    panes:
+      - shell_command: cd ~/Dropbox/ucla/probgenomics_book
+        focus: true
+      - shell_command: cd ~/Dropbox/ucla/probgenomics_book
+  - window_name: ''
+    layout: even-horizontal
+    panes:
+      - shell_command: cd ~/Dropbox/ucla/probgenomics_book
+      - shell_command: cd ~/Dropbox/ucla/probgenomics_book

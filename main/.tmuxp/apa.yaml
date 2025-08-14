@@ -2,13 +2,12 @@ session_name: apa
 start_directory: ~/Dropbox/postdoc/apa
 windows:
   - window_name: remote
-    layout: even-horizontal
     panes:
       - shell_command: ssh midway
         focus: true
-      - shell_command:
-  - window_name: local
+      - window_name: local
     layout: even-horizontal
     panes:
-      - shell_command:
+      start_directory: src
+      - shell_command: R
       - shell_command:

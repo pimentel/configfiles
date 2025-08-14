@@ -11,11 +11,13 @@ endif
 Plug 'ajh17/VimCompletesMe'
 Plug 'tpope/vim-obsession'
 Plug 'airblade/vim-gitgutter'
+" Plug 'xolox/vim-session'
+" Plug 'xolox/vim-misc'
 Plug 'jpalardy/vim-slime'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-sleuth'
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'Chiel92/vim-autoformat'
@@ -34,8 +36,9 @@ Plug 'vim-scripts/matchit.zip'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'gabrielelana/vim-markdown'
 Plug 'lervag/vimtex'
-Plug 'jalvesaq/Nvim-R'
+" Plug 'jalvesaq/Nvim-R'
 Plug 'klmr/vim-snakemake'
+Plug 'eigenfoo/stan-vim'
 
 " linter support
 Plug 'w0rp/ale'
@@ -198,10 +201,10 @@ noremap <Leader>i :Files<CR>
 noremap <Leader>k :BD<CR>
 
 " Slime stuff
-noremap <Leader><Leader>f :call b:SlimeBlocksFunction()<CR>
-noremap <Leader><Leader>m :call b:SlimeBlocksFenced()<CR>
-noremap <Leader><Leader>p :SlimeParagraphSend<CR>
-noremap <Leader><Leader>l :SlimeSendCurrentLine<CR>
+noremap <LocalLeader>f :call b:SlimeBlocksFunction()<CR>
+noremap <LocalLeader>m :call b:SlimeBlocksFenced()<CR>
+noremap <LocalLeader>p :SlimeParagraphSend<CR>
+noremap <LocalLeader>l :SlimeSendCurrentLine<CR>
 
 " ============================================================================
 " general autocmd
@@ -230,7 +233,7 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 let r_indent_align_args = 0
 
 " Nvim-R
-let R_assign = 2
+" let R_assign = 2
 " let R_in_buffer = 0
 " let R_applescript = 1
 
@@ -244,7 +247,8 @@ let g:ale_linters = {
 let g:ale_r_lintr_options='lintr::with_defaults(single_quotes_linter = NULL,
       \ assignment_linter = NULL, line_length_linter(100),
       \ absolute_paths_linter = NULL, absolute_path_linter = NULL,
-      \ commented_code_linter = NULL, object_usage_linter = NULL)'
+      \ commented_code_linter = NULL, object_usage_linter = NULL,
+      \ camel_case_linter = NULL)'
 
 " python
 " let g:ale_python_flake8_executable = '/Users/hjp/miniconda3/bin/flake8'
@@ -252,6 +256,13 @@ let g:ale_python_flake8_options=' --ignore F401,E731'
 autocmd Filetype python setl tabstop=4 sw=4 sts=4
 autocmd Filetype python setl colorcolumn=80 textwidth=80
 
+autocmd BufNewFile,BufRead Snakefile setfiletype snakemake
+autocmd FileType snakemake setlocal commentstring=#\ %s
+autocmd Filetype snakemake setl tabstop=4 sw=4 sts=4
+
+autocmd Filetype tex setl spell
+
+autocmd FileType rmd setlocal commentstring=#\ %s
 
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
@@ -285,6 +296,16 @@ if executable('ag')
   let g:ackprg = 'ag --mmap --vimgrep'
 endif
 
+let g:session_autoload = 'yes'
+let g:session_autosave = 'yes'
+
 " ==============================================================================
 " custom functions
 " ==============================================================================
+
+function! LatexCount()
+  silent !clear
+  execute "!texcount " . expand('%:p') . " -inc -nobib -sum -1"
+endfunction
+
+autocmd FileType tex nnoremap gwc :call LatexCount()<CR>

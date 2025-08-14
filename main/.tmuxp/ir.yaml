@@ -4,9 +4,8 @@ windows:
   - window_name: remote
     layout: even-horizontal
     panes:
-      - shell_command: ssh sherlock2
+      - shell_command: ssh sherlock
         focus: true
-      - shell_command:
   - window_name: local
     layout: even-horizontal
     panes:

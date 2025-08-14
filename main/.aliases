@@ -24,4 +24,6 @@ alias dev_kallisto="~/dev/kallisto/build/src/kallisto"
 # odd error on mac: https://github.com/ggreer/the_silver_searcher/issues/1038
 alias ag="ag --mmap"
 
+alias lwc="texcount -inc -nobib -sum -1"
+
 # vi:ft=sh

@@ -40,3 +40,14 @@ if (( $+commands[fzf] )) && (( $+commands[ag] )); then
 fi
 
 source "$HOME/.slimzsh/slim.zsh"
+
+# Emacs mode
+bindkey -e
+
+unsetopt correct_all
+setopt correct
+
+# automatically expand history arguments like !$
+# this behavior is similar to bash
+unsetopt hist_verify
+setopt hist_expand

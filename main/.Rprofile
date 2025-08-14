@@ -1,4 +1,4 @@
-options(repos = structure(c(CRAN = "http://cran.cnr.berkeley.edu")))
+options(repos = structure(c(CRAN = 'https://ftp.osuosl.org/pub/cran/')))
 
 options(chmhelp = "html")
 options(max.print = 1000)
