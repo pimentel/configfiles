@@ -3,9 +3,11 @@ tap 'homebrew/cask-fonts'
 
 # install scripts we want
 brew 'ag'
+brew 'bartender'
 brew 'boost'
 brew 'cmake'
 brew 'coreutils'
+brew 'fasd'
 brew 'fzf'
 brew 'git'
 brew 'hdf5'
@@ -28,14 +30,7 @@ tap 'caskroom/cask'
 
 # install the apps we want
 cask 'dropbox'
-cask 'font-hack'
-cask 'flux'
-cask 'google-chrome'
-cask 'iterm2'
 cask 'macvim'
-cask 'r-app'
-cask 'slack'
-cask 'spotify'
 
 tap 'universal-ctags/universal-ctags'
 brew 'universal-ctags', args: ['HEAD']
