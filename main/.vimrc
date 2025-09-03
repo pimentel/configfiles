@@ -8,7 +8,7 @@ if has('gui_running')
   set guifont=Hack:h14
 endif
 
-Plug 'ajh17/VimCompletesMe'
+" Plug 'ajh17/VimCompletesMe'
 Plug 'tpope/vim-obsession'
 Plug 'airblade/vim-gitgutter'
 " Plug 'xolox/vim-session'
@@ -309,3 +309,6 @@ function! LatexCount()
 endfunction
 
 autocmd FileType tex nnoremap gwc :call LatexCount()<CR>
+
+" fzf
+set rtp+=/opt/homebrew/opt/fzf

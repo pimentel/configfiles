@@ -1,5 +1,5 @@
 source ~/.aliases
-source ~/.profile
+# source ~/.profile
 
 export PATH=/usr/local/opt/ccache/libexec:$PATH
 export PATH=$HOME/bin:$PATH
@@ -10,7 +10,7 @@ export VISUAL='mvim '
 # added by Miniconda3 4.3.21 installer
 export PATH="/Users/hjp/miniconda3/bin:$PATH"
 
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

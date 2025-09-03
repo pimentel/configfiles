@@ -26,4 +26,8 @@ alias ag="ag --mmap"
 
 alias lwc="texcount -inc -nobib -sum -1"
 
+# change directory using fzf
+# https://omarelhawary.me/blog/faster-directory-navigation-with-fzf/
+alias sd="cd ~ && cd \$(find * -type d | fzf)"
+
 # vi:ft=sh
